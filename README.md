@@ -9,4 +9,4 @@ Deployed module will include this features:
 
 Stack: 
 1. Simple html file with 2 field and a button.
-2. nodejs app using expressоі
+2. nodejs app using expressjs
