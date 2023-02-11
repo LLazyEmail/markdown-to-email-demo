@@ -4,9 +4,26 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>markdown-to-email demo</title>
   </head>
   <body>
     <h3>markdown-to-email demo</h3>
+
+    <!-- TODO find a way how to download file when redefine onsubmit logic in form  -->
+    <!--  onsubmit="return onSubmitForm(event)" -->
+
+    <form id="myform" method="POST" enctype="multipart/form-data">
+      <p>
+        Choose a markdown file:
+        <input accept=".md" type="file" name="markdownFile" />
+      </p>
+      <select name="generateTo">
+        <option value="html" selected>HTML</option>
+        <option value="react">React component</option>
+      </select>
+
+      <p><input id="generateButton" type="submit" value="Generate" /></p>
+    </form>
+    <script src="js/index.js"></script>
   </body>
 </html>

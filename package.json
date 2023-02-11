@@ -19,7 +19,8 @@
   },
   "homepage": "https://github.com/LLazyEmail/markdown-to-email-demo#readme",
   "dependencies": {
-    "express": "4.18.2"
+    "express": "4.18.2",
+    "multiparty": "4.2.3"
   },
   "devDependencies": {
     "nodemon": "2.0.20"
