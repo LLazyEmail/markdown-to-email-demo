@@ -25,9 +25,10 @@ app.post("/", function (req, res, next) {
 
   form.on("error", next);
   form.on("close", function () {
-    console.log("close");
+    const filename = "generated.md";
     res.setHeader("Content-Type", "text/markdown");
-    res.setHeader("Content-Disposition", 'attachment; filename="js.md"');
+    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+    res.setHeader("filename", filename);
 
     bufferFile = Buffer.concat(file.bufferArray, file.totalLength);
 

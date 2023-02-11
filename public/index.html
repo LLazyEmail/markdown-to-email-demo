@@ -9,10 +9,11 @@
   <body>
     <h3>markdown-to-email demo</h3>
 
-    <!-- TODO find a way how to download file when redefine onsubmit logic in form  -->
-    <!--  onsubmit="return onSubmitForm(event)" -->
-
-    <form id="myform" method="POST" enctype="multipart/form-data">
+    <form
+      id="myform"
+      onsubmit="return onSubmitForm(event)"
+      enctype="multipart/form-data"
+    >
       <p>
         Choose a markdown file:
         <input accept=".md" type="file" name="markdownFile" />
