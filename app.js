@@ -1,6 +1,8 @@
 const express = require("express");
 const path = require("path");
-
+const {
+  generateHtmlFullTemplateHackernoon,
+} = require("@lazyemail/markdown-to-email");
 var multiparty = require("multiparty");
 
 const app = express();
@@ -25,14 +27,15 @@ app.post("/", function (req, res, next) {
 
   form.on("error", next);
   form.on("close", function () {
-    const filename = "generated.md";
-    res.setHeader("Content-Type", "text/markdown");
+    const filename = "html.html";
+    res.setHeader("Content-Type", "text/html");
     res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
     res.setHeader("filename", filename);
 
     bufferFile = Buffer.concat(file.bufferArray, file.totalLength);
+    const html = generateHtmlFullTemplateHackernoon(bufferFile.toString());
 
-    res.send(bufferFile);
+    res.send(html);
   });
 
   form.on("field", function (name, val) {
