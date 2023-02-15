@@ -24,7 +24,7 @@ function onSubmitForm(e) {
   const formdata = new FormData(myform);
 
   if (!formdata.get("markdownFile").name) {
-    errElement.innerHTML = "Chose a file";
+    errElement.innerHTML = "Choose a file";
     errElement.setAttribute("class", "error");
     return;
   }
