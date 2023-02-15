@@ -5,26 +5,46 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>markdown-to-email demo</title>
+    <link rel="stylesheet" href="css/styles.css" />
   </head>
   <body>
-    <h3>markdown-to-email demo</h3>
+    <section class="main">
+      <div class="container">
+        <h3>markdown-to-email demo</h3>
 
-    <form
-      id="myform"
-      onsubmit="return onSubmitForm(event)"
-      enctype="multipart/form-data"
-    >
-      <p>
-        Choose a markdown file:
-        <input accept=".md" type="file" name="markdownFile" />
-      </p>
-      <select name="generateTo">
-        <option value="html" selected>HTML</option>
-        <option value="react">React component</option>
-      </select>
+        <form
+          id="myform"
+          onsubmit="return onSubmitForm(event)"
+          enctype="multipart/form-data"
+        >
+          <div class="row">
+            <label for="markdownFile">Choose a markdown file:</label>
+            <input accept=".md" type="file" name="markdownFile" />
+          </div>
 
-      <p><input id="generateButton" type="submit" value="Generate" /></p>
-    </form>
+          <div class="row">
+            <label for="template">Template</label>
+            <select name="template">
+              <option value="hackernoon">Hackernoon</option>
+              <option value="recipes">Recipes</option>
+            </select>
+          </div>
+
+          <div class="row">
+            <label for="generateTo">Generate to</label>
+            <select name="generateTo">
+              <option value="html" selected>HTML</option>
+              <option value="react">React component</option>
+            </select>
+          </div>
+
+          <div id="err"></div>
+
+          <p><input id="generateButton" type="submit" value="Generate" /></p>
+        </form>
+      </div>
+    </section>
+
     <script src="js/index.js"></script>
   </body>
 </html>

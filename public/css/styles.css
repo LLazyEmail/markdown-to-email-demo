@@ -1,0 +1,41 @@
+body {
+  background-color: #f7f7f7;
+}
+
+section.main form {
+  margin-top: 100px;
+  width: 400px;
+}
+
+section.main form {
+  font-size: 24px;
+}
+
+section.main form select,
+input[type="file"] {
+  margin-top: 10px;
+  font-size: 24px;
+}
+
+section.main #generateButton {
+  font-size: 24px;
+}
+
+.row {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  margin: 0 auto;
+  width: 900px;
+}
+
+#err {
+  margin-top: 10px;
+}
+
+.error {
+  color: red;
+}

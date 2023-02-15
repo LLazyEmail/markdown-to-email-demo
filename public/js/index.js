@@ -6,40 +6,54 @@ function downloadBlob(blob, name = "file.txt") {
   link.download = name;
   document.body.appendChild(link);
 
-  // Dispatch click event on the link
-  // This is necessary as link.click() does not work on the latest firefox
-  link.dispatchEvent(
-    new MouseEvent("click", {
-      bubbles: true,
-      cancelable: true,
-      view: window,
-    })
-  );
+  link.click();
 
   document.body.removeChild(link);
 }
 
 function onSubmitForm(e) {
   e.preventDefault();
-  console.log("e", e);
+
+  const errElement = document.getElementById("err");
+  if (errElement.innerHTML) {
+    errElement.innerHTML = "";
+    errElement.removeAttribute("class");
+  }
 
   const myform = document.getElementById("myform");
   const formdata = new FormData(myform);
 
-  fetch(`${window.origin}/`, {
+  if (!formdata.get("markdownFile").name) {
+    errElement.innerHTML = "Chose a file";
+    errElement.setAttribute("class", "error");
+    return;
+  }
+
+  fetch(`${window.origin}/generate`, {
     method: "POST",
     body: formdata,
-  }).then((res) => {
-    res
-      .blob()
-      .then((blob) => ({
-        filename: res.headers.get("filename"),
-        raw: blob,
-      }))
-      .then((result) => {
-        downloadBlob(result.raw, result.filename);
-      });
-  });
+  })
+    .then((res) => {
+      console.log("res", res);
+      if (res.status === 400) {
+        throw new Error("Error");
+      }
+
+      return res
+        .blob()
+        .then((blob) => ({
+          filename: res.headers.get("filename"),
+          raw: blob,
+        }))
+        .then((result) => {
+          downloadBlob(result.raw, result.filename);
+        });
+    })
+    .catch(() => {
+      const errElement = document.getElementById("err");
+      errElement.innerHTML = "Error";
+      errElement.setAttribute("class", "error");
+    });
 
   return false;
 }

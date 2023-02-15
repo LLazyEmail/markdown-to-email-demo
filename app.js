@@ -2,6 +2,8 @@ const express = require("express");
 const path = require("path");
 const {
   generateHtmlFullTemplateHackernoon,
+  generateReactFullTemplateHackernoon,
+  generateHtmlFullTemplateRecipes,
 } = require("@lazyemail/markdown-to-email");
 var multiparty = require("multiparty");
 
@@ -15,10 +17,12 @@ app.get("/", function (req, res) {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-app.post("/", function (req, res, next) {
+app.post("/generate", function (req, res, next) {
   var form = new multiparty.Form();
 
   let generateTo = "";
+  let template = "";
+
   const file = {
     filename: null,
     bufferArray: [],
@@ -27,26 +31,70 @@ app.post("/", function (req, res, next) {
 
   form.on("error", next);
   form.on("close", function () {
-    const filename = "html.html";
-    res.setHeader("Content-Type", "text/html");
-    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
-    res.setHeader("filename", filename);
+    const templateMap = {
+      hackernoon: {
+        html: generateHtmlFullTemplateHackernoon,
+        react: generateReactFullTemplateHackernoon,
+      },
+      recipes: {
+        html: generateHtmlFullTemplateRecipes,
+      },
+    };
 
     bufferFile = Buffer.concat(file.bufferArray, file.totalLength);
-    const html = generateHtmlFullTemplateHackernoon(bufferFile.toString());
+    const generator = templateMap[template][generateTo];
 
-    res.send(html);
+    console.log("generator", generator);
+
+    if (!generator) {
+      console.log("call");
+      res.status(400).send('Sorry, cant find that');
+      return;
+    }
+
+    const content = generator(bufferFile.toString());
+
+    const extentionMap = {
+      html: {
+        ext: "html",
+        contentType: "text/html",
+      },
+      react: {
+        ext: "js",
+        contentType: "application/javascript",
+      },
+    };
+
+    console.log("file", file.filename);
+    const extentionData = extentionMap[generateTo];
+
+    const filenameResult = `${file.filename}.${extentionData.ext}`;
+    res.setHeader("Content-Type", extentionData.contentType);
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="${filenameResult}"`
+    );
+    res.setHeader("filename", file.filename);
+
+    res.send(content);
   });
 
   form.on("field", function (name, val) {
-    if (name !== "generateTo") return;
-    generateTo = val;
+    if (name === "generateTo") {
+      generateTo = val;
+      return;
+    }
+
+    if (name === "template") {
+      template = val;
+      return;
+    }
   });
 
   form.on("part", function (part) {
     if (!part.filename) return;
     if (part.name !== "markdownFile") return part.resume();
-    file.filename = part.filename;
+    file.filename = part.filename.slice(0, part.filename.length - 3);
 
     part.on("data", function (buf) {
       file.bufferArray.push(buf);
