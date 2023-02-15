@@ -44,10 +44,7 @@ app.post("/generate", function (req, res, next) {
     bufferFile = Buffer.concat(file.bufferArray, file.totalLength);
     const generator = templateMap[template][generateTo];
 
-    console.log("generator", generator);
-
     if (!generator) {
-      console.log("call");
       res.status(400).send('Sorry, cant find that');
       return;
     }
@@ -65,7 +62,6 @@ app.post("/generate", function (req, res, next) {
       },
     };
 
-    console.log("file", file.filename);
     const extentionData = extentionMap[generateTo];
 
     const filenameResult = `${file.filename}.${extentionData.ext}`;
